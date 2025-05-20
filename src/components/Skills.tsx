@@ -53,7 +53,7 @@ const Skills: React.FC = () => {
         { name: "Python", progress: 82, gradient: 'teal', icon: <Code size={18} /> },
         { name: "C", progress: 75, gradient: 'blue', icon: <Terminal size={18} /> },
         { name: "TypeScript", progress: 78, gradient: 'blue', icon: <Code size={18} /> },
-        { name: "Java", progress: 70, gradient: 'orange', icon: <Coffee size={18} /> },
+        { name: "C++", progress: 70, gradient: 'orange', icon: <Coffee size={18} /> },
       ]
     },
     {
