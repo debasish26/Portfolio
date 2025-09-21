@@ -1,41 +1,72 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowUp } from 'lucide-react';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import About from './components/About';
-import Skills from './components/Skills';
-import Projects from './components/Projects';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
+import SimpleHero from './components/SimpleHero';
+import SimpleAbout from './components/SimpleAbout';
+import SimpleSkills from './components/SimpleSkills';
+import SimpleProjects from './components/SimpleProjects';
+import SimpleContact from './components/SimpleContact';
 
 function App() {
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const currentProgress = (window.pageYOffset / totalScroll) * 100;
-      setScrollProgress(currentProgress);
+      setShowScrollTop(window.scrollY > 400);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  return (
-    <div className="min-h-screen bg-navy-900 text-gray-100">
-      {/* Progress Bar */}
-      <div
-        className="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 z-50 transition-all duration-300"
-        style={{ width: `${scrollProgress}%` }}
-      ></div>
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
+  console.log('App rendering with all sections...');
+
+  return (
+    <div className="min-h-screen relative">
       <Navbar />
-      <Hero />
-      <About />
-      <Skills />
-      <Projects />
-      <Contact />
-      <Footer />
+      <section id="home">
+        <SimpleHero />
+      </section>
+      <section id="about">
+        <SimpleAbout />
+      </section>
+      <section id="skills">
+        <SimpleSkills />
+      </section>
+      <section id="projects">
+        <SimpleProjects />
+      </section>
+      <section id="contact">
+        <SimpleContact />
+      </section>
+      {/* <Footer /> */}
+      
+      {/* Scroll to Top Button */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            onClick={scrollToTop}
+            className="fixed bottom-8 right-8 z-50 p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            initial={{ opacity: 0, scale: 0, y: 100 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0, y: 100 }}
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            aria-label="Scroll to top"
+          >
+            <ArrowUp size={20} />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

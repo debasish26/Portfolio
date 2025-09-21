@@ -1,44 +1,94 @@
-import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 
 const Navbar: React.FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <nav className="fixed w-full bg-gradient-to-b from-navy-800/80 to-navy-800/20 backdrop-blur-xl z-40 border-b border-white/10">
-      <div className="container mx-auto px-6 py-4">
+    <nav 
+      className={`fixed w-full z-50 transition-all duration-300 ${
+        scrolled 
+          ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-lg border-b border-gray-200/50 dark:border-gray-700/50' 
+          : 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-700'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">
-            Debasish<span className="text-blue-500">.</span>
+          {/* Logo */}
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <a href="#home" className="flex items-center hover:scale-105 transition-transform duration-200">
+              Debasish
+              <span className="text-blue-600 dark:text-blue-400 ml-1">.</span>
+            </a>
           </h1>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex gap-8">
-            <a href="#home" className="nav-link">Home</a>
-            <a href="#about" className="nav-link">About</a>
-            <a href="#skills" className="nav-link">Skills</a>
-            <a href="#projects" className="nav-link">Projects</a>
-            <a href="#contact" className="nav-link">Contact</a>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-8">
+            <a href="#home" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
+              Home
+            </a>
+            <a href="#about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
+              About
+            </a>
+            <a href="#skills" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
+              Skills
+            </a>
+            <a href="#projects" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
+              Projects
+            </a>
+            <a href="https://blogs-of-debasishh.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
+              Blogs
+            </a>
+            <a href="#contact" className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg">
+              Contact
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-gray-300 hover:text-blue-500 transition-colors"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            <div className="w-6 h-6 flex flex-col justify-center items-center">
+              <span className={`w-full h-0.5 bg-current block transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-1' : ''}`} />
+              <span className={`w-full h-0.5 bg-current block mt-1 transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-full h-0.5 bg-current block mt-1 transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-1' : ''}`} />
+            </div>
           </button>
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4">
-            <div className="flex flex-col gap-4">
-              <a href="#home" className="nav-link" onClick={() => setIsMenuOpen(false)}>Home</a>
-              <a href="#about" className="nav-link" onClick={() => setIsMenuOpen(false)}>About</a>
-              <a href="#skills" className="nav-link" onClick={() => setIsMenuOpen(false)}>Skills</a>
-              <a href="#projects" className="nav-link" onClick={() => setIsMenuOpen(false)}>Projects</a>
-              <a href="#contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>Contact</a>
+        {isOpen && (
+          <div className="md:hidden absolute top-full left-0 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700 shadow-xl">
+            <div className="px-6 py-4 space-y-4">
+              <a href="#home" className="block py-2 font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" onClick={() => setIsOpen(false)}>
+                Home
+              </a>
+              <a href="#about" className="block py-2 font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" onClick={() => setIsOpen(false)}>
+                About
+              </a>
+              <a href="#skills" className="block py-2 font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" onClick={() => setIsOpen(false)}>
+                Skills
+              </a>
+              <a href="#projects" className="block py-2 font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" onClick={() => setIsOpen(false)}>
+                Projects
+              </a>
+              <a href="https://blogs-of-debasishh.netlify.app/" target="_blank" rel="noopener noreferrer" className="block py-2 font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" onClick={() => setIsOpen(false)}>
+                Blogs
+              </a>
+              <a href="#contact" className="block w-full text-center py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-300" onClick={() => setIsOpen(false)}>
+                Contact
+              </a>
             </div>
           </div>
         )}
